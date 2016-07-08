@@ -1,0 +1,17 @@
+{
+  "name": "parse-server-example-for-android-livequery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "kerberos": "0.0.21",
+    "mongodb-runner": "^3.3.2",
+    "parse-dashboard": "^1.0.14",
+    "parse-server": "^2.2.15"
+  }
+}

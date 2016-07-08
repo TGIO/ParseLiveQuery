@@ -1,0 +1,78 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.kt3k.coveralls'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+dependencies {
+    compile 'com.squareup.okhttp3:okhttp-ws:3.4.0-SNAPSHOT'
+    compile 'com.android.support:support-annotations:24.0.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+    provided 'com.parse:parse-android:1.13.1'
+
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.skyscreamer:jsonassert:1.2.3'
+
+}
+
+//region Code Coverage
+
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion "0.7.1.201405082137"
+}
+
+task jacocoTestReport(type:JacocoReport, dependsOn: ["test", "testDebugUnitTest"]) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports"
+
+    classDirectories = fileTree(
+            dir: "${buildDir}/intermediates/classes/debug",
+            excludes: ['**/R.class',
+                       '**/R$*.class',
+                       '**/*$ViewInjector*.*',
+                       '**/BuildConfig.*',
+                       '**/Manifest*.*']
+    )
+
+    sourceDirectories = files("${buildDir.parent}/src/main/java")
+    additionalSourceDirs = files([
+            "${buildDir}/generated/source/buildConfig/debug",
+            "${buildDir}/generated/source/r/debug"
+    ])
+    executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+//endregion
+
+//region Coveralls
+
+coveralls.jacocoReportPath = "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+
+//endregion
