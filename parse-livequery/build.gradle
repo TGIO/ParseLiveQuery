@@ -1,6 +1,32 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.kt3k.coveralls'
 
+def version = 1;
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'parse-livequery'
+
+    publishedGroupId = 'com.github.tgio'
+    libraryName = 'Parse LiveQuery'
+    artifact = 'parse-livequery'
+
+    libraryDescription = "Very simple and modern implementation, it lacks tests and extra functionality at this moment but i'm working on it."
+
+    siteUrl = 'https://github.com/TGIO/ParseLiveQuery'
+    gitUrl = 'https://github.com/TGIO/ParseLiveQuery.git'
+
+    libraryVersion = "1.0.".concat(version.toString())
+
+    developerId = 'tgio'
+    developerName = 'Giorgi Tabatadze'
+    developerEmail = 'gio.caporegime@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
@@ -28,7 +54,7 @@ dependencies {
     compile 'com.android.support:support-annotations:24.0.0'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
-    provided 'com.parse:parse-android:1.13.1'
+    compile 'com.artemzin.rxjava:proguard-rules:1.1.6.0'
 
     testCompile 'org.robolectric:robolectric:3.0'
     testCompile 'org.skyscreamer:jsonassert:1.2.3'
@@ -76,3 +102,7 @@ task jacocoTestReport(type:JacocoReport, dependsOn: ["test", "testDebugUnitTest"
 coveralls.jacocoReportPath = "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
 
 //endregion
+
+
+apply from: '../bintray.gradle';
+apply from: '../install.gradle';

@@ -1,11 +1,11 @@
 ## Parse LiveQuery Implementation for Android
 Very simple and modern implementation, it lacks tests and extra functionality at this moment but i'm working on it.
 
-#### Import guide (publishing process not finished yet [OSSRH-23542](https://issues.sonatype.org/browse/OSSRH-23542))
+#### Import guide
 
 ```
 dependencies {
-    compile 'com.github.tgio:parse-livequery:1.0.0'
+    compile 'com.github.tgio:parse-livequery:1.0.1'
 }
 ```
 
