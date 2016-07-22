@@ -1,3 +1,5 @@
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ParseLiveQuery-green.svg?style=true)](https://android-arsenal.com/details/1/3921)
+
 ## Parse LiveQuery Implementation for Android
 Very simple and modern implementation, it lacks tests and extra functionality at this moment but i'm working on it.
 
