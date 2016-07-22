@@ -5,7 +5,7 @@ Very simple and modern implementation, it lacks tests and extra functionality at
 
 ```
 dependencies {
-    compile 'com.github.tgio:parse-livequery:1.0.1'
+    compile 'com.github.tgio:parse-livequery:1.0.2'
 }
 ```
 
