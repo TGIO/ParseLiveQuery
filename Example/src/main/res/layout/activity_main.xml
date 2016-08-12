@@ -14,4 +14,34 @@
         android:id="@+id/resultView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/send"
+            android:text="Send"/>
+        <EditText
+            android:layout_toLeftOf="@id/send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/message"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/input">
+        <Button
+            android:text="unsubscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/unsubscribe"/>
+    </RelativeLayout>
+
 </RelativeLayout>

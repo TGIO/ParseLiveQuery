@@ -9,7 +9,7 @@ var api = new ParseServer({
     appId: 'myAppId',
     masterKey: 'myMasterKey', // Keep this key secret!
     fileKey: 'optionalFileKey',
-    serverURL: 'http://localhost:1337/parse', // Don't forget to change to https if needed
+    serverURL: 'http://192.168.0.31:1337/parse', // Don't forget to change to https if needed
     liveQuery: {
         classNames: ['Message']
     }
@@ -18,10 +18,11 @@ var api = new ParseServer({
 var dashboard = new ParseDashboard({
     "apps": [
         {
-            "serverURL": "http://localhost:1337/parse",
+            "serverURL": "http://192.168.0.31:1337/parse",
             "appId": "myAppId",
             "masterKey": "myMasterKey",
-            "appName": "MyApp"
+            "appName": "MyApp",
+            "clientKey": "2ead5328dda34e688816040a0e78948a"
         }
     ]
 });

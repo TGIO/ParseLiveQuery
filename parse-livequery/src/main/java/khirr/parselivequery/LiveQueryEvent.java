@@ -1,8 +1,6 @@
-package tgio.parselivequery;
+package khirr.parselivequery;
 
 import org.json.JSONObject;
-
-import tgio.parselivequery.queries.BaseQuery;
 
 /**
  * Created by pro on 16-07-08.

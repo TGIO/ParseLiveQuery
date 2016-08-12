@@ -1,9 +1,10 @@
-package tgio.parselivequery;
+package khirr.parselivequery;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -15,7 +16,8 @@ import okhttp3.ws.WebSocket;
 import okhttp3.ws.WebSocketCall;
 import okhttp3.ws.WebSocketListener;
 import okio.Buffer;
-import tgio.parselivequery.queries.BaseQuery;
+import rx.functions.Action1;
+import khirr.parselivequery.interfaces.OnListener;
 
 /**
  * Created by pro on 16-06-20.
@@ -32,6 +34,11 @@ public class LiveQueryClient {
 
     public static LiveQueryClient instance;
 
+    //  Connect && Disconnect to LiveServer events
+    public static final String CONNECTED = Constants.CONNECTED;
+    public static final String SUBSCRIBED = Constants.SUBSCRIBED;
+    private ArrayList<Event> mEvents = new ArrayList<>();
+
     LiveQueryClient (String _baseUrl, String _applicationId){
         baseUrl = _baseUrl;
         applicationId = _applicationId;
@@ -47,6 +54,9 @@ public class LiveQueryClient {
 
         // Trigger shutdown of the dispatcher's executor so this process can exit cleanly.
         client.dispatcher().executorService().shutdown();
+
+        //  Listen events
+        listenEvents();
     }
 
     private static LiveQueryClient getInstance(){
@@ -68,7 +78,7 @@ public class LiveQueryClient {
         return lastRequestID;
     }
 
-    private void connectIntenrnal(){
+    private void connectInternal(){
         if(!isOpened) {
             autoConnect = true;
             return;
@@ -81,21 +91,25 @@ public class LiveQueryClient {
     }
 
     public static void connect() {
-        getInstance().connectIntenrnal();
+        getInstance().connectInternal();
     }
 
-    private void executeQueryInternal(BaseQuery baseQuery){
+    private void executeQueryInternal(String query) {
         if (webSocket != null) {
             try {
-                webSocket.sendMessage(RequestBody.create(WebSocket.TEXT, baseQuery.toString()));
+                webSocket.sendMessage(RequestBody.create(WebSocket.TEXT, query));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static void executeQuery(BaseQuery baseQuery) {
-        getInstance().executeQueryInternal(baseQuery);
+    protected static void executeQuery(BaseQuery baseQuery) {
+        getInstance().executeQueryInternal(baseQuery.toString());
+    }
+
+    protected static void executeQuery(String query) {
+        getInstance().executeQueryInternal(query);
     }
 
     static String getConnectMessage() {
@@ -107,9 +121,9 @@ public class LiveQueryClient {
         @Override
         public void onOpen(WebSocket _webSocket, Response response) {
             isOpened = true;
-            if(_webSocket != null) {
+            if (_webSocket != null) {
                 webSocket = _webSocket;
-                if(autoConnect) {
+                if (autoConnect) {
                     connect();
                 }
             }
@@ -142,5 +156,22 @@ public class LiveQueryClient {
         }
     };
 
+    // Connect && Disconnect events
+    public static void on(String op, OnListener listener) {
+        getInstance().mEvents.add(new Event(op, listener));
+    }
+
+    private void listenEvents() {
+        RxBus.subscribe(new Action1<LiveQueryEvent>() {
+            @Override
+            public void call(final LiveQueryEvent event) {
+                for (Event ev : mEvents) {
+                    if (event.op.equals(ev.getOp())) {
+                        ev.getListener().on(event.object);
+                    }
+                }
+            }
+        });
+    }
 
 }

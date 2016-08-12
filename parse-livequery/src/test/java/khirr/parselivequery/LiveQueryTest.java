@@ -1,4 +1,4 @@
-package tgio.parselivequery;
+package khirr.parselivequery;
 
 import org.junit.After;
 import org.junit.Before;
