@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.khirr:ParseLiveQuery:-SNAPSHOT'
+    compile 'com.github.khirr:ParseLiveQuery:e1a4d67cd2'
 }
 ```
 
