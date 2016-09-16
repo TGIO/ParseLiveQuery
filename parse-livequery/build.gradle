@@ -28,12 +28,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 2
         versionName "1.0.2"
     }
@@ -51,7 +51,7 @@ repositories {
 
 dependencies {
     compile 'com.squareup.okhttp3:okhttp-ws:3.4.0'
-    compile 'com.android.support:support-annotations:24.0.0'
+    compile 'com.android.support:support-annotations:23.3.0'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'com.artemzin.rxjava:proguard-rules:1.1.6.0'
