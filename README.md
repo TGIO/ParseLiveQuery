@@ -27,7 +27,7 @@ dependencies {
 
   ```java
 //Do initialization, for example in App.java
-LiveQueryClient.init(WS_URL, MY_APP_ID);
+LiveQueryClient.init(WS_URL, MY_APP_ID, true);
 
 //Connect
 LiveQueryClient.connect();
@@ -42,7 +42,7 @@ final Subscription subscription = new BaseQuery.Builder("Message")
         .subscribe();
 
 //  Listen
-subscription.on(Subscription.CREATE, new OnListener() {
+subscription.on(LiveQueryEvent.CREATE, new OnListener() {
     @Override
     public void on(final JSONObject object) {
         Log.e("CREATED", object.toString());
