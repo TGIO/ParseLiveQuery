@@ -19,9 +19,6 @@ import okio.Buffer;
 import rx.functions.Action1;
 import khirr.parselivequery.interfaces.OnListener;
 
-/**
- * Created by pro on 16-06-20.
- */
 public class LiveQueryClient {
     static final int INFINITE = 0;
 
@@ -30,10 +27,13 @@ public class LiveQueryClient {
     static WebSocket webSocket;
     static boolean autoConnect = false;
     static boolean isOpened = false;
+    static boolean isConnected = false;
     static int lastRequestID = -1;
 
     public static LiveQueryClient instance;
     private ArrayList<Event> mEvents = new ArrayList<>();
+
+    private static ArrayList<Subscription> mSubscriptions = new ArrayList<>();
 
     LiveQueryClient (String _baseUrl, String _applicationId){
         baseUrl = _baseUrl;
@@ -112,6 +112,14 @@ public class LiveQueryClient {
         return String.format("{ \"op\": \"%s\", \"applicationId\": \"%s\" }", "connect", applicationId);
     }
 
+    private static synchronized boolean isConnected() {
+        return isConnected;
+    }
+
+    private static synchronized void setIsConnected(boolean connected) {
+        isConnected = connected;
+    }
+
 
     WebSocketListener webSocketListener = new WebSocketListener() {
         @Override
@@ -136,6 +144,11 @@ public class LiveQueryClient {
                 JSONObject jsonObject = new JSONObject(responseBody.string());
                 @BaseQuery.op String op = jsonObject.optString(Constants.OP);
                 RxBus.broadCast(new LiveQueryEvent(op, jsonObject));
+                //  Create server subscriptions
+                if (op.equals(LiveQueryEvent.CONNECTED)) {
+                    setIsConnected(true);
+                    registerExistingSubscriptions();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -168,6 +181,27 @@ public class LiveQueryClient {
                 }
             }
         });
+    }
+
+    //  Register subscriptions
+    public static void registerSubscription(Subscription subscription) {
+        mSubscriptions.add(subscription);
+        if (isConnected()) {
+            executeQuery(subscription.getQuery());
+        }
+    }
+
+    //  Remove subscription
+    public static void removeSubscription(Subscription subscription) {
+        mSubscriptions.remove(subscription);
+        LiveQueryClient.executeQuery(subscription.getQuery().unsubscribeQueryToString());
+    }
+
+    //  Register existing subscription after server connection
+    private synchronized void registerExistingSubscriptions() {
+        for (Subscription subscription : mSubscriptions) {
+            executeQuery(subscription.getQuery());
+        }
     }
 
 }

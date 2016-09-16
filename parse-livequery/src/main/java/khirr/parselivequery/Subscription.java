@@ -21,12 +21,12 @@ public class Subscription {
     }
 
     protected void subscribe() {
-        LiveQueryClient.executeQuery(mBaseQuery);
+        LiveQueryClient.registerSubscription(this);
         listen();
     }
 
     public void unsubscribe() {
-        LiveQueryClient.executeQuery(mBaseQuery.unsubscribeQueryToString());
+        LiveQueryClient.removeSubscription(this);
         if (!mRxSubscription.isUnsubscribed()) {
             mRxSubscription.unsubscribe();
         }
@@ -34,6 +34,10 @@ public class Subscription {
 
     public boolean isSubscribed() {
         return !mRxSubscription.isUnsubscribed();
+    }
+
+    protected BaseQuery getQuery() {
+        return mBaseQuery;
     }
 
     public void on(@NonNull final String op, @NonNull final OnListener listener) {
@@ -44,7 +48,6 @@ public class Subscription {
         mRxSubscription = RxBus.subscribe(new Action1<LiveQueryEvent>() {
             @Override
             public void call(final LiveQueryEvent event) {
-                Log.e("E", event.toString());
                 for (Event ev : mEvents) {
                     if (ev.getOp().equals(LiveQueryEvent.ALL)) {
                         ev.getListener().on(event.object);
