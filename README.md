@@ -1,4 +1,4 @@
-[![Jit Pack](https://img.shields.io/badge/JitPack-ParseLiveQUery-green.svg)](https://jitpack.io/#khirr/ParseLiveQuery/-SNAPSHOT)
+[![Jit Pack](https://img.shields.io/badge/JitPack-ParseLiveQUery-green.svg)](https://jitpack.io/#tgio/ParseLiveQuery/-SNAPSHOT)
 ## Parse LiveQuery Implementation for Android
 Simple ParseLiveQuery with subscribe, unsubscribe and listen events.
 Based on [ParseLiveQuery](https://github.com/TGIO/ParseLiveQuery)
@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.khirr:ParseLiveQuery:bdc19eb'
+    compile 'com.github.tgio:ParseLiveQuery:bdc19eb'
 }
 ```
 

@@ -1,10 +1,10 @@
-package khirr.parselivequery.example;
+package tgio.parselivequery.example;
 
 import com.parse.Parse;
 
 import rx.functions.Action1;
-import khirr.parselivequery.LiveQueryClient;
-import khirr.parselivequery.RxBus;
+import tgio.parselivequery.LiveQueryClient;
+import tgio.parselivequery.RxBus;
 
 /**
  * Created by pro on 16-07-08.
@@ -26,12 +26,5 @@ public class Application extends android.app.Application {
         );
 
         LiveQueryClient.init(WS_URL, MY_APP_ID, true);
-
-        RxBus.subscribe(new Action1() {
-            @Override
-            public void call(Object o) {
-
-            }
-        });
     }
 }

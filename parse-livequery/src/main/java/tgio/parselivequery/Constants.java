@@ -1,4 +1,4 @@
-package khirr.parselivequery;
+package tgio.parselivequery;
 
 /**
  * Created by pro on 16-06-21.

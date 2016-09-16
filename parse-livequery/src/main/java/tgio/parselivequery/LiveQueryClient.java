@@ -1,4 +1,4 @@
-package khirr.parselivequery;
+package tgio.parselivequery;
 
 import android.util.Log;
 
@@ -21,7 +21,7 @@ import okhttp3.ws.WebSocketCall;
 import okhttp3.ws.WebSocketListener;
 import okio.Buffer;
 import rx.functions.Action1;
-import khirr.parselivequery.interfaces.OnListener;
+import tgio.parselivequery.interfaces.OnListener;
 
 public class LiveQueryClient {
     static final int INFINITE = 0;

@@ -1,4 +1,4 @@
-package khirr.parselivequery;
+package tgio.parselivequery;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.functions.Action1;
-import khirr.parselivequery.interfaces.OnListener;
+import tgio.parselivequery.interfaces.OnListener;
 
 public class Subscription {
 

@@ -1,4 +1,4 @@
-package khirr.parselivequery.interfaces;
+package tgio.parselivequery.interfaces;
 
 import org.json.JSONObject;
 

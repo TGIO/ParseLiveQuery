@@ -1,6 +1,6 @@
-package khirr.parselivequery;
+package tgio.parselivequery;
 
-import khirr.parselivequery.interfaces.OnListener;
+import tgio.parselivequery.interfaces.OnListener;
 
 public class Event {
 

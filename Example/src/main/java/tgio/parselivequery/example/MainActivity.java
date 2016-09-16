@@ -1,4 +1,4 @@
-package khirr.parselivequery.example;
+package tgio.parselivequery.example;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +12,11 @@ import com.parse.ParseObject;
 
 import org.json.JSONObject;
 
-import khirr.parselivequery.LiveQueryClient;
-import khirr.parselivequery.BaseQuery;
-import khirr.parselivequery.LiveQueryEvent;
-import khirr.parselivequery.Subscription;
-import khirr.parselivequery.interfaces.OnListener;
+import tgio.parselivequery.LiveQueryClient;
+import tgio.parselivequery.BaseQuery;
+import tgio.parselivequery.LiveQueryEvent;
+import tgio.parselivequery.Subscription;
+import tgio.parselivequery.interfaces.OnListener;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package khirr.parselivequery;
+package tgio.parselivequery;
 
 import android.support.annotation.StringDef;
 
