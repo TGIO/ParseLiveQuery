@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.khirr:ParseLiveQuery:e1a4d67cd2'
+    compile 'com.github.khirr:ParseLiveQuery:68d1913f9e'
 }
 ```
 
@@ -36,8 +36,8 @@ LiveQueryClient.connect();
 
 //  Subscription
 final Subscription subscription = new BaseQuery.Builder("Message")
-        .where("text", "asd")
-        .addField("text")
+        .where("body", "asd")
+        .addField("body")
         .build()
         .subscribe();
 
