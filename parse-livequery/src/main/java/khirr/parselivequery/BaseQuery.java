@@ -98,6 +98,7 @@ public class BaseQuery {
 
         public Builder(String className) {
             this.baseQuery = new BaseQuery(Constants.SUBSCRIBE, LiveQueryClient.getNewRequestId(), className);
+            this.baseQuery.setSessionToken(LiveQueryClient.getSessionToken());
         }
 
         public Builder addField(String field) {
@@ -105,6 +106,11 @@ public class BaseQuery {
                 baseQuery.fields = new ArrayList<>();
             }
             baseQuery.fields.add(field);
+            return this;
+        }
+
+        public Builder sessionToken(String sessionToken) {
+            this.baseQuery.setSessionToken(sessionToken);
             return this;
         }
 

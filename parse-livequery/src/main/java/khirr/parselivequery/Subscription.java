@@ -18,12 +18,6 @@ public class Subscription {
 
     public Subscription(BaseQuery baseQuery) {
         mBaseQuery = baseQuery;
-        mBaseQuery.setSessionToken(LiveQueryClient.getSessionToken());
-    }
-
-    public Subscription(BaseQuery baseQuery, String sessionToken) {
-        mBaseQuery = baseQuery;
-        mBaseQuery.setSessionToken(sessionToken);
     }
 
     protected void subscribe() {
