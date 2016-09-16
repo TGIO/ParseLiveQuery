@@ -44,6 +44,8 @@ public class LiveQueryClient {
 
     private static ScheduledExecutorService mScheduleTaskExecutor;
 
+    private static String mSessionToken;
+
     LiveQueryClient (String _baseUrl, String _applicationId) {
         baseUrl = _baseUrl;
         applicationId = _applicationId;
@@ -84,6 +86,14 @@ public class LiveQueryClient {
         baseUrl = _baseUrl;
         applicationId = _applicationId;
         autoReConnect = _autoReConnect;
+        getInstance();
+    }
+
+    public static void init(String _baseUrl, String _applicationId, String _sessionToken, boolean _autoReConnect) {
+        baseUrl = _baseUrl;
+        applicationId = _applicationId;
+        autoReConnect = _autoReConnect;
+        mSessionToken = _sessionToken;
         getInstance();
     }
 
@@ -270,6 +280,11 @@ public class LiveQueryClient {
                 e.printStackTrace();
             }
         }
+    }
+
+    //  Token
+    protected static String getSessionToken() {
+        return mSessionToken;
     }
 
 }

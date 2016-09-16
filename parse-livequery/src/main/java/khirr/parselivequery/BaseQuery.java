@@ -35,7 +35,7 @@ public class BaseQuery {
     public @op String op;
     public int requestId;
     public List<String> fields = null;
-
+    private String mSessionToken;
 
     @Override
     public String toString() {
@@ -45,6 +45,9 @@ public class BaseQuery {
         try {
             jo.put(Constants.OP, op);
             jo.put(Constants.REQUEST_ID, requestId);
+            if (mSessionToken != null) {
+                jo.put(Constants.SESSION_TOKEN, mSessionToken);
+            }
             query.put(Constants.CLASS_NAME, className);
             where.put(whereKey, whereValue);
             query.put(Constants.WHERE, where);
@@ -60,6 +63,10 @@ public class BaseQuery {
             e.printStackTrace();
         }
         return jo.toString();
+    }
+
+    protected void setSessionToken(String sessionToken) {
+        mSessionToken = sessionToken;
     }
 
     protected String unsubscribeQueryToString() {

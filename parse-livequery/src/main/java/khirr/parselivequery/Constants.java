@@ -14,6 +14,7 @@ class Constants {
     protected static final String DELETE = "delete";
     protected static final String UNSUBSCRIBE = "unsubscribe";
     protected static final String ERROR = "error";
+    protected static final String SESSION_TOKEN = "sessionToken";
 
     protected static final String OP = "op";
     protected static final String REQUEST_ID = "requestId";
