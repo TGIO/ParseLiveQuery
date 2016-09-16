@@ -21,6 +21,8 @@ import khirr.parselivequery.interfaces.OnListener;
 public class MainActivity extends AppCompatActivity {
 
     private TextView resultView;
+    private Button mConnectButton;
+    private Button mDisconnectButton;
     private Button mUnsubscribeButton;
     private Button mSendButton;
     private EditText mMessageEditText;
@@ -32,11 +34,13 @@ public class MainActivity extends AppCompatActivity {
 
         resultView = (TextView) findViewById(R.id.resultView);
         mUnsubscribeButton = (Button) findViewById(R.id.unsubscribe);
+        mConnectButton = (Button) findViewById(R.id.connect);
+        mDisconnectButton = (Button) findViewById(R.id.disconnect);
         mSendButton = (Button) findViewById(R.id.send);
         mMessageEditText = (EditText) findViewById(R.id.message);
 
-        //  Connection
-        LiveQueryClient.connect();
+        //  Connection, when starts or by Connect Button
+        //LiveQueryClient.connect();
 
         LiveQueryClient.on(LiveQueryEvent.CONNECTED, new OnListener() {
             @Override
@@ -66,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
         //  Subscription
         final Subscription subscription = new BaseQuery.Builder("Message")
-                .where("text", "asd")
-                .addField("text")
+                .where("body", "asd")
+                .addField("body")
                 .build()
                 .subscribe();
 
@@ -106,6 +110,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //  Connect
+        mConnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LiveQueryClient.connect();
+            }
+        });
+
+        //  Disconnect
+        mDisconnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LiveQueryClient.disconnect();
+            }
+        });
+
         //  Send Message for testing, text must be "asd"
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 mMessageEditText.setText("");
                 if (message.length() > 0) {
                     ParseObject po = new ParseObject("Message");
-                    po.put("text", message);
+                    po.put("body", message);
                     po.saveInBackground();
                 }
             }

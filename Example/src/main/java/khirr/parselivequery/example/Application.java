@@ -25,7 +25,7 @@ public class Application extends android.app.Application {
                 .build()
         );
 
-        LiveQueryClient.init(WS_URL, MY_APP_ID);
+        LiveQueryClient.init(WS_URL, MY_APP_ID, true);
 
         RxBus.subscribe(new Action1() {
             @Override

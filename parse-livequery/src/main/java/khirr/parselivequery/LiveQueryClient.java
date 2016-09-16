@@ -1,10 +1,14 @@
 package khirr.parselivequery;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -22,22 +26,32 @@ import khirr.parselivequery.interfaces.OnListener;
 public class LiveQueryClient {
     static final int INFINITE = 0;
 
+    static final String CLASS_NAME = "LiveQueryClient";
+
     static String baseUrl;
     static String applicationId;
     static WebSocket webSocket;
-    static boolean autoConnect = false;
     static boolean isOpened = false;
     static boolean isConnected = false;
     static int lastRequestID = -1;
+
+    static boolean autoReConnect = false;
 
     public static LiveQueryClient instance;
     private ArrayList<Event> mEvents = new ArrayList<>();
 
     private static ArrayList<Subscription> mSubscriptions = new ArrayList<>();
 
-    LiveQueryClient (String _baseUrl, String _applicationId){
+    private static ScheduledExecutorService mScheduleTaskExecutor;
+
+    LiveQueryClient (String _baseUrl, String _applicationId) {
         baseUrl = _baseUrl;
         applicationId = _applicationId;
+        //  Listen events
+        listenEvents();
+    }
+
+    private void connectToServer() {
         OkHttpClient client = new OkHttpClient()
                 .newBuilder()
                 .readTimeout(INFINITE, TimeUnit.SECONDS)
@@ -50,12 +64,9 @@ public class LiveQueryClient {
 
         // Trigger shutdown of the dispatcher's executor so this process can exit cleanly.
         client.dispatcher().executorService().shutdown();
-
-        //  Listen events
-        listenEvents();
     }
 
-    private static LiveQueryClient getInstance(){
+    private static LiveQueryClient getInstance() {
         if(instance == null) {
             instance = new  LiveQueryClient(baseUrl, applicationId);
         }
@@ -69,16 +80,46 @@ public class LiveQueryClient {
         getInstance();
     }
 
+    public static void init(String _baseUrl, String _applicationId, boolean _autoReConnect) {
+        baseUrl = _baseUrl;
+        applicationId = _applicationId;
+        autoReConnect = _autoReConnect;
+        getInstance();
+    }
+
+    public static void connect() {
+        if (isConnected()) {
+            Log.i(CLASS_NAME, CLASS_NAME + " is already connected");
+            return;
+        }
+        getInstance().connectToServer();
+    }
+
+    public static void disconnect() {
+        destroyConnection();
+        getInstance().removeTryToReConnect();
+        Log.i(CLASS_NAME, CLASS_NAME + " disconnected");
+    }
+
+    private static void destroyConnection() {
+        try {
+            if (webSocket != null) {
+                webSocket.close(1000, "Connection closed");
+            }
+            webSocket = null;
+            setIsConnected(false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static int getNewRequestId(){
         lastRequestID++;
         return lastRequestID;
     }
 
-    private void connectInternal(){
-        if(!isOpened) {
-            autoConnect = true;
-            return;
-        }
+    private void connectInternal() {
         try {
             webSocket.sendMessage(RequestBody.create(WebSocket.TEXT, getConnectMessage()));
         } catch (IOException e) {
@@ -86,7 +127,7 @@ public class LiveQueryClient {
         }
     }
 
-    public static void connect() {
+    private static void validateConnection() {
         getInstance().connectInternal();
     }
 
@@ -112,7 +153,7 @@ public class LiveQueryClient {
         return String.format("{ \"op\": \"%s\", \"applicationId\": \"%s\" }", "connect", applicationId);
     }
 
-    private static synchronized boolean isConnected() {
+    public static synchronized boolean isConnected() {
         return isConnected;
     }
 
@@ -127,15 +168,15 @@ public class LiveQueryClient {
             isOpened = true;
             if (_webSocket != null) {
                 webSocket = _webSocket;
-                if (autoConnect) {
-                    connect();
-                }
+                validateConnection();
             }
         }
 
         @Override
         public void onFailure(IOException e, Response response) {
             e.printStackTrace();
+            destroyConnection();
+            tryToReConnect();
         }
 
         @Override
@@ -201,6 +242,33 @@ public class LiveQueryClient {
     private synchronized void registerExistingSubscriptions() {
         for (Subscription subscription : mSubscriptions) {
             executeQuery(subscription.getQuery());
+        }
+    }
+
+    //  Reconnection
+    private synchronized void tryToReConnect() {
+        if (!autoReConnect) return;
+        mScheduleTaskExecutor = Executors.newSingleThreadScheduledExecutor();
+        mScheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    connectToServer();
+                    removeTryToReConnect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 3, 3, TimeUnit.SECONDS);
+    }
+
+    private void removeTryToReConnect() {
+        if (mScheduleTaskExecutor != null) {
+            try {
+                mScheduleTaskExecutor.shutdownNow();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
