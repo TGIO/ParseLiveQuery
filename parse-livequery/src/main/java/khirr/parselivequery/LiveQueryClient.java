@@ -33,10 +33,6 @@ public class LiveQueryClient {
     static int lastRequestID = -1;
 
     public static LiveQueryClient instance;
-
-    //  Connect && Disconnect to LiveServer events
-    public static final String CONNECTED = Constants.CONNECTED;
-    public static final String SUBSCRIBED = Constants.SUBSCRIBED;
     private ArrayList<Event> mEvents = new ArrayList<>();
 
     LiveQueryClient (String _baseUrl, String _applicationId){

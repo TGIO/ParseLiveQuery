@@ -11,13 +11,6 @@ import khirr.parselivequery.interfaces.OnListener;
 
 public class Subscription {
 
-    public static final String CREATE = Constants.CREATE;
-    public static final String ENTER = Constants.ENTER;
-    public static final String UPDATE = Constants.UPDATE;
-    public static final String LEAVE = Constants.LEAVE;
-    public static final String DELETE = Constants.DELETE;
-    public static final String ALL = Constants.ERROR;
-
     private BaseQuery mBaseQuery;
     private List<Event> mEvents = new ArrayList<>();
 
@@ -53,7 +46,7 @@ public class Subscription {
             public void call(final LiveQueryEvent event) {
                 Log.e("E", event.toString());
                 for (Event ev : mEvents) {
-                    if (ev.getOp().equals(ALL)) {
+                    if (ev.getOp().equals(LiveQueryEvent.ALL)) {
                         ev.getListener().on(event.object);
                     } else if (event.op.equals(ev.getOp())) {
                         ev.getListener().on(event.object);
