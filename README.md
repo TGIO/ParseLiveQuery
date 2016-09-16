@@ -32,7 +32,7 @@ LiveQueryClient.init(WS_URL, MY_APP_ID, true);
 //Connect
 LiveQueryClient.connect();
 
-//Subscribe for parse object "Message" where "text" equals "asd" and include "text" field in response
+//Subscribe for parse object "Message" where "body" equals "asd" and include "body" field in response
 
 //  Subscription
 final Subscription subscription = new BaseQuery.Builder("Message")
