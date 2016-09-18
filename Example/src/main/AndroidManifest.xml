@@ -8,9 +8,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".Application"
+        android:name="tgio.parselivequery.example.Application"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="tgio.parselivequery.example.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -1,4 +1,4 @@
-package tgio.parselivequery.queries;
+package tgio.parselivequery;
 
 import android.support.annotation.StringDef;
 
@@ -10,9 +10,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
-
-import tgio.parselivequery.Constants;
-import tgio.parselivequery.LiveQueryClient;
 
 /**
  * Created by pro on 16-06-21.
@@ -38,7 +35,7 @@ public class BaseQuery {
     public @op String op;
     public int requestId;
     public List<String> fields = null;
-
+    private String mSessionToken;
 
     @Override
     public String toString() {
@@ -48,12 +45,15 @@ public class BaseQuery {
         try {
             jo.put(Constants.OP, op);
             jo.put(Constants.REQUEST_ID, requestId);
+            if (mSessionToken != null) {
+                jo.put(Constants.SESSION_TOKEN, mSessionToken);
+            }
             query.put(Constants.CLASS_NAME, className);
             where.put(whereKey, whereValue);
             query.put(Constants.WHERE, where);
-            if(fields != null) {
+            if (fields != null) {
                 JSONArray fieldsArray = new JSONArray();
-                for(String field : fields){
+                for (String field : fields) {
                     fieldsArray.put(field);
                 }
                 query.put(Constants.FIELDS, fieldsArray);
@@ -63,6 +63,27 @@ public class BaseQuery {
             e.printStackTrace();
         }
         return jo.toString();
+    }
+
+    protected void setSessionToken(String sessionToken) {
+        mSessionToken = sessionToken;
+    }
+
+    protected String unsubscribeQueryToString() {
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put(Constants.OP, Constants.UNSUBSCRIBE);
+            jo.put(Constants.REQUEST_ID, requestId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jo.toString();
+    }
+
+    public Subscription subscribe() {
+        Subscription subscription = new Subscription(this);
+        subscription.subscribe();
+        return subscription;
     }
 
     private BaseQuery(@op String op, int requestId, String className) {
@@ -75,8 +96,9 @@ public class BaseQuery {
         BaseQuery baseQuery;
 
 
-        public Builder(@op String op, String className) {
-            this.baseQuery = new BaseQuery(op, LiveQueryClient.getNewRequestId(), className);
+        public Builder(String className) {
+            this.baseQuery = new BaseQuery(Constants.SUBSCRIBE, LiveQueryClient.getNewRequestId(), className);
+            this.baseQuery.setSessionToken(LiveQueryClient.getSessionToken());
         }
 
         public Builder addField(String field) {
@@ -84,6 +106,11 @@ public class BaseQuery {
                 baseQuery.fields = new ArrayList<>();
             }
             baseQuery.fields.add(field);
+            return this;
+        }
+
+        public Builder sessionToken(String sessionToken) {
+            this.baseQuery.setSessionToken(sessionToken);
             return this;
         }
 

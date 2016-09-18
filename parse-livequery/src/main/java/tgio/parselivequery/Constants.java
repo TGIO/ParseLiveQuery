@@ -3,23 +3,28 @@ package tgio.parselivequery;
 /**
  * Created by pro on 16-06-21.
  */
-public class Constants {
-    public static final String CONNECT = "connect";
-    public static final String SUBSCRIBE = "subscribe";
-    public static final String CREATE = "create";
-    public static final String ENTER = "enter";
-    public static final String UPDATE = "update";
-    public static final String LEAVE = "leave";
-    public static final String DELETE = "delete";
-    public static final String UNSUBSCRIBE = "unsubscribe";
-    public static final String ERROR = "error";
+class Constants {
 
-    public static final String OP = "op";
-    public static final String REQUEST_ID = "requestId";
-    public static final String CLASS_NAME = "className";
-    public static final String WHERE = "where";
-    public static final String FIELDS = "fields";
-    public static final String QUERY = "query";
+    protected static final String CONNECT = "connect";
+    protected static final String SUBSCRIBE = "subscribe";
+    protected static final String CREATE = "create";
+    protected static final String ENTER = "enter";
+    protected static final String UPDATE = "update";
+    protected static final String LEAVE = "leave";
+    protected static final String DELETE = "delete";
+    protected static final String UNSUBSCRIBE = "unsubscribe";
+    protected static final String ERROR = "error";
+    protected static final String SESSION_TOKEN = "sessionToken";
 
-    public static final String CONNECTED = "connected";
+    protected static final String OP = "op";
+    protected static final String REQUEST_ID = "requestId";
+    protected static final String CLASS_NAME = "className";
+    protected static final String WHERE = "where";
+    protected static final String FIELDS = "fields";
+    protected static final String QUERY = "query";
+
+    protected static final String CONNECTED = "connected";
+    protected static final String SUBSCRIBED = "subscribed";
+
+    protected static final String ALL = "all";
 }

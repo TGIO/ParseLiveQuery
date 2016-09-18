@@ -1,6 +1,6 @@
 package tgio.parselivequery;
 
-import rx.Observable;
+import rx.*;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 import rx.subjects.SerializedSubject;
@@ -21,8 +21,9 @@ public class RxBus {
     public static void broadCast(LiveQueryEvent event) {
         getInstance().send(event);
     }
-    public static void subscribe(final Action1 onNext){
-        getInstance().toObserverable().subscribe(onNext);
+
+    public static rx.Subscription subscribe(final Action1 onNext) {
+        return getInstance().toObserverable().subscribe(onNext);
     }
 
     private void send(LiveQueryEvent event) {

@@ -1,13 +1,17 @@
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ParseLiveQuery-green.svg?style=true)](https://android-arsenal.com/details/1/3921)
-
+[![Jit Pack](https://img.shields.io/badge/JitPack-ParseLiveQUery-green.svg)](https://jitpack.io/#tgio/ParseLiveQuery/-SNAPSHOT)
 ## Parse LiveQuery Implementation for Android
-Very simple and modern implementation, it lacks tests and extra functionality at this moment but i'm working on it.
+Simple ParseLiveQuery with subscribe, unsubscribe and listen events.
+Based on [ParseLiveQuery](https://github.com/TGIO/ParseLiveQuery)
 
 #### Import guide
 
 ```
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
-    compile 'com.github.tgio:parse-livequery:1.0.2'
+    compile 'com.github.tgio:ParseLiveQuery:bdc19eb'
 }
 ```
 
@@ -23,26 +27,29 @@ dependencies {
 
   ```java
 //Do initialization, for example in App.java
-LiveQueryClient.init(WS_URL, MY_APP_ID);
+LiveQueryClient.init(WS_URL, MY_APP_ID, true);
 
 //Connect
 LiveQueryClient.connect();
 
-//Subscribe for parse object "Message" where "text" equals "asd" and include "text" field in response
+//Subscribe for parse object "Message" where "body" equals "asd" and include "body" field in response
 
-RxBus.subscribe(new Action1<LiveQueryEvent>() {
+//  Subscription
+final Subscription subscription = new BaseQuery.Builder("Message")
+        .where("body", "asd")
+        .addField("body")
+        .build()
+        .subscribe();
+
+//  Listen
+subscription.on(LiveQueryEvent.CREATE, new OnListener() {
     @Override
-    public void call(final LiveQueryEvent event) {
-        if (event.op.equals(Constants.CONNECTED)) {
-            LiveQueryClient.executeQuery(
-                            new BaseQuery.Builder(Constants.SUBSCRIBE, "Message")
-                            .where("text", "asd")
-                            .addField("text")
-                            .build());
-        } else {
-            System.out.println(event.object.toString());
-        }
+    public void on(final JSONObject object) {
+        Log.e("CREATED", object.toString());
     }
 });
+
+//  Unsubscribe
+//subscription.unsubscribe();
 
   ```
