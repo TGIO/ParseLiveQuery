@@ -6,12 +6,8 @@ Based on [ParseLiveQuery](https://github.com/TGIO/ParseLiveQuery)
 #### Import guide
 
 ```
-repositories {
-    maven { url "https://jitpack.io" }
-}
-
 dependencies {
-    compile 'com.github.tgio:ParseLiveQuery:bdc19eb'
+    compile 'com.github.tgio:parse-livequery:1.0.3'
 }
 ```
 
@@ -53,3 +49,6 @@ subscription.on(LiveQueryEvent.CREATE, new OnListener() {
 //subscription.unsubscribe();
 
   ```
+  
+#### Contributors
+[Khirr] (https://github.com/khirr)

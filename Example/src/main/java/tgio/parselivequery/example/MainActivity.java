@@ -90,17 +90,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //  Listen ALL events
-        subscription.on(LiveQueryEvent.ALL, new OnListener() {
-            @Override
-            public void on(final JSONObject object) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //resultView.append(object.toString() + "\n");
-                    }
-                });
-            }
-        });
+//        subscription.on(LiveQueryEvent.ALL, new OnListener() {
+//            @Override
+//            public void on(final JSONObject object) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        resultView.append(object.toString() + "\n");
+//                    }
+//                });
+//            }
+//        });
 
         //  Unsubscribe
         mUnsubscribeButton.setOnClickListener(new View.OnClickListener() {
