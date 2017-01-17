@@ -5,7 +5,6 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,13 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
-import okhttp3.ws.WebSocket;
-import okhttp3.ws.WebSocketCall;
-import okhttp3.ws.WebSocketListener;
-import okio.Buffer;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 import rx.functions.Action1;
 import tgio.parselivequery.interfaces.OnListener;
 
@@ -62,14 +57,14 @@ public class LiveQueryClient {
         Request request = new Request.Builder()
                 .url(baseUrl)
                 .build();
-        WebSocketCall.create(client, request).enqueue(webSocketListener);
+        client.newWebSocket(request, webSocketListener);
 
         // Trigger shutdown of the dispatcher's executor so this process can exit cleanly.
         client.dispatcher().executorService().shutdown();
     }
 
     private static LiveQueryClient getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new  LiveQueryClient(baseUrl, applicationId);
         }
         return instance;
@@ -130,11 +125,7 @@ public class LiveQueryClient {
     }
 
     private void connectInternal() {
-        try {
-            webSocket.sendMessage(RequestBody.create(WebSocket.TEXT, getConnectMessage()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        webSocket.send(getConnectMessage());
     }
 
     private static void validateConnection() {
@@ -143,11 +134,7 @@ public class LiveQueryClient {
 
     private void executeQueryInternal(String query) {
         if (webSocket != null) {
-            try {
-                webSocket.sendMessage(RequestBody.create(WebSocket.TEXT, query));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            webSocket.send(query);
         }
     }
 
@@ -181,18 +168,16 @@ public class LiveQueryClient {
                 validateConnection();
             }
         }
-
         @Override
-        public void onFailure(IOException e, Response response) {
-            e.printStackTrace();
+        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+            t.printStackTrace();
             destroyConnection();
             tryToReConnect();
         }
-
         @Override
-        public void onMessage(ResponseBody responseBody) throws IOException {
+        public void onMessage(WebSocket webSocket, String text) {
             try {
-                JSONObject jsonObject = new JSONObject(responseBody.string());
+                JSONObject jsonObject = new JSONObject(text);
                 @BaseQuery.op String op = jsonObject.optString(Constants.OP);
                 RxBus.broadCast(new LiveQueryEvent(op, jsonObject));
                 //  Create server subscriptions
@@ -203,16 +188,6 @@ public class LiveQueryClient {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-
-        @Override
-        public void onPong(Buffer buffer) {
-
-        }
-
-        @Override
-        public void onClose(int i, String s) {
-
         }
     };
 
