@@ -1,3 +1,5 @@
+Deprecated, please use https://github.com/parse-community/ParseLiveQuery-Android
+
 [![Jit Pack](https://img.shields.io/badge/JitPack-ParseLiveQUery-green.svg)](https://jitpack.io/#tgio/ParseLiveQuery/-SNAPSHOT)
 ## Parse LiveQuery Implementation for Android
 Simple ParseLiveQuery with subscribe, unsubscribe and listen events.
