@@ -31,7 +31,7 @@ public class BaseQuery {
     public @interface op {}
     public String className;
     public String whereKey;
-    public String whereValue;
+    public Object whereValue;
     public @op String op;
     public int requestId;
     public List<String> fields = null;
@@ -115,6 +115,12 @@ public class BaseQuery {
         }
 
         public Builder where(String key, String value) {
+            this.baseQuery.whereKey = key;
+            this.baseQuery.whereValue = value;
+            return this;
+        }
+
+        public Builder where(String key, JSONObject value) {
             this.baseQuery.whereKey = key;
             this.baseQuery.whereValue = value;
             return this;
